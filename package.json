@@ -1,0 +1,51 @@
+{
+  "name": "amodb-mcp",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server for the amodb movie and TV API (TMDB v3 compatible).",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "amodb-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "test": "npm run build && node --test",
+    "prepublishOnly": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/netlistenany-bot/amodb-mcp.git"
+  },
+  "homepage": "https://amodb.dev",
+  "bugs": {
+    "url": "https://github.com/netlistenany-bot/amodb-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "tmdb",
+    "omdb",
+    "movies",
+    "tv",
+    "amodb"
+  ],
+  "license": "MIT",
+  "author": "amodb",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.0",
+    "ajv": "^8.17.1",
+    "typescript": "^5.9.3"
+  }
+}

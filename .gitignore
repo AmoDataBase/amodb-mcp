@@ -1,0 +1,16 @@
+node_modules/
+dist/
+build/
+.venv/
+__pycache__/
+.pytest_cache/
+vendor/
+.env
+.env.local
+*.tsbuildinfo
+coverage/
+.nyc_output/
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
