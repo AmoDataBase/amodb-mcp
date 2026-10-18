@@ -19,4 +19,14 @@ Text in docs and comments: short, concrete sentences, sentence case headings, no
 
 Never commit API keys. Use environment variables and `.env` files that are ignored by git.
 
+## Releasing
+
+For maintainers.
+
+1. Update `CHANGELOG.md` and set the new `version` in `package.json`.
+2. Commit, then tag the commit and push the tag: `git tag v0.2.0 && git push origin v0.2.0`.
+3. The Release workflow checks that the tag matches `package.json`, runs the checks, publishes to npm with provenance and creates the GitHub release.
+
+One time setup: add an npm automation token as the repository secret `NPM_TOKEN`.
+
 By contributing you agree that your work is released under the MIT license of this repository.

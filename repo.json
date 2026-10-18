@@ -1,0 +1,6 @@
+{
+  "name": "amodb-mcp",
+  "description": "Model Context Protocol server for the amodb movie and TV API. Search titles, read records and check trending lists from Claude, Cursor and VS Code.",
+  "homepage": "https://amodb.dev",
+  "topics": ["amodb", "mcp", "model-context-protocol", "mcp-server", "tmdb", "omdb", "movie-api", "tv-api", "claude", "typescript"]
+}

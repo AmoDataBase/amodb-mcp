@@ -22,11 +22,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/netlistenany-bot/amodb-mcp.git"
+    "url": "git+https://github.com/amodb-dev/amodb-mcp.git"
   },
   "homepage": "https://amodb.dev",
   "bugs": {
-    "url": "https://github.com/netlistenany-bot/amodb-mcp/issues"
+    "url": "https://github.com/amodb-dev/amodb-mcp/issues"
   },
   "keywords": [
     "mcp",

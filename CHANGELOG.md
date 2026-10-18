@@ -15,6 +15,8 @@ One section per version, newest first.
 - `get_movie` and `get_tv_show` descriptions state the shapes of the appended ratings, moods, soundtracks and Wikidata sections, and that reviews are empty for most titles.
 - The language description lists the 14 served languages.
 - The server instructions mention `get_showtimes`.
+- Add CI, release and Dependabot workflows.
+- Repository and package URLs now point to the amodb-dev organization.
 
 ### Removed
 

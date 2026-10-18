@@ -1,5 +1,18 @@
-<!-- GitHub topics: amodb, mcp, model-context-protocol, mcp-server, tmdb, omdb, movie-api, tv-api, claude, typescript -->
-# amodb-mcp
+<p align="center">
+  <a href="https://amodb.dev">
+    <img src="https://raw.githubusercontent.com/amodb-dev/.github/main/assets/lockup.png" alt="amodb" width="260">
+  </a>
+</p>
+
+<h1 align="center">amodb-mcp</h1>
+
+<p align="center">MCP server for movie and TV data. Search titles and read full records from Claude, Cursor and VS Code.</p>
+
+<p align="center">
+  <a href="https://github.com/amodb-dev/amodb-mcp/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/amodb-dev/amodb-mcp/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="https://www.npmjs.com/package/amodb-mcp"><img alt="npm version" src="https://img.shields.io/npm/v/amodb-mcp"></a>
+  <a href="https://github.com/amodb-dev/amodb-mcp/blob/main/LICENSE"><img alt="License" src="https://img.shields.io/github/license/amodb-dev/amodb-mcp"></a>
+</p>
 
 A Model Context Protocol server for movie and TV data. It lets Claude, Cursor, VS Code and other MCP clients search titles, read full movie, TV and person records, and check trending lists through the amodb API.
 
@@ -93,7 +106,7 @@ Create `.vscode/mcp.json`. VS Code asks for the key once and keeps it out of the
 ### Local checkout
 
 ```sh
-git clone https://github.com/netlistenany-bot/amodb-mcp
+git clone https://github.com/amodb-dev/amodb-mcp
 cd amodb-mcp
 npm install
 npm run build
@@ -154,6 +167,17 @@ npm start
 ```
 
 The tests run the built server over stdio against a local stub API, so they need no key and no network.
+
+## Links
+
+- Website: https://amodb.dev
+- Docs: https://amodb.dev/docs
+- Pricing: https://amodb.dev/pricing
+- Status: https://amodb.dev/status
+- Issues: https://github.com/amodb-dev/amodb-mcp/issues
+- Changelog: https://github.com/amodb-dev/amodb-mcp/blob/main/CHANGELOG.md
+- Security: https://github.com/amodb-dev/amodb-mcp/blob/main/SECURITY.md
+- Organization: https://github.com/amodb-dev
 
 ## License
 
