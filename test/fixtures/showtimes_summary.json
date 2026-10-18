@@ -1,0 +1,16 @@
+{
+  "id": 550,
+  "country": null,
+  "results": [],
+  "countries": [
+    {
+      "country": "RU",
+      "name": "Russia",
+      "venues": 2,
+      "cities": 1,
+      "showtimes": 7,
+      "first_day": "2026-10-18",
+      "last_day": "2026-10-21"
+    }
+  ]
+}

@@ -10,15 +10,18 @@ amodb is a paid API, get a key at https://amodb.dev/pricing. The API is compatib
 | Tool | What it does |
 |---|---|
 | `search_titles` | Search movies, TV shows or people by name. Use it to get a numeric id. |
-| `get_movie` | Full movie record. Add cast, trailers, release dates, streaming providers and more with `append`. |
-| `get_tv_show` | Full TV show record, with the same `append` options plus content ratings. |
+| `get_movie` | Full movie record. Add cast, trailers, release dates, streaming providers, ratings, moods, soundtracks, Wikidata facts and more with `append`. |
+| `get_tv_show` | Full TV show record, with the same `append` options, with content ratings and episode groups instead of release dates. |
 | `get_season` | One season with its episode list. |
 | `get_person` | Actor or crew record. Add the full filmography with `combined_credits`. |
-| `find_by_external_id` | Turn an IMDb id (for example `tt0137523`) into an amodb id. |
+| `find_by_external_id` | Turn an IMDb id (for example `tt0137523`), a Kinopoisk id or a Wikidata id into an amodb id. |
 | `trending` | Trending movies, TV shows or people, for the day or the week. |
 | `discover_movies` | Find movies by genre, year, rating, language, region and sort order. |
+| `get_showtimes` | Cinema showtimes for a movie or TV title. Without a country it lists the countries that have showtimes. With a country it lists cinemas and times. |
 
-List tools return 10 items by default. Pass `limit` (1 to 20) to change that. The `get_` tools return the full record, so use `append` only for what you need.
+List tools return 10 items by default. Pass `limit` (1 to 20) to change that. `get_showtimes` returns 5 cinemas with 10 showtimes each by default, see `max_venues` and `max_showtimes_per_venue`, and reports the full counts. The `get_` tools return the full record, so use `append` only for what you need.
+
+The tools cover what the amodb API serves. TMDB account, list, rating and session calls, aggregate credits and change feeds are not offered, so there is no tool for them.
 
 ## Install
 
@@ -125,6 +128,8 @@ Then point the client at the built file:
 - "Find Fight Club, then show its runtime, the top cast and where I can stream it."
 - "What is trending on TV this week?"
 - "Look up the IMDb id tt0137523 and tell me who directed it."
+- "Show the IMDb, Rotten Tomatoes and Metacritic scores of Fight Club."
+- "Which cinemas in Russia show Fight Club, and when?"
 - "Find science fiction movies from 2010 with a rating of 7.5 or higher and at least 500 votes."
 
 ## Rate limits

@@ -1,11 +1,13 @@
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
+import { readFileSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { after, before, describe, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import Ajv from 'ajv';
+import { TOOL_NAMES } from '../dist/tools.js';
 
 const ENTRY = fileURLToPath(new URL('../dist/index.js', import.meta.url));
 const KEY = '0123456789abcdef0123456789abcdef';
@@ -15,10 +17,19 @@ const EXPECTED_TOOLS = [
   'get_movie',
   'get_person',
   'get_season',
+  'get_showtimes',
   'get_tv_show',
   'search_titles',
   'trending',
 ];
+
+// Real API bodies, trimmed (see test/fixtures).
+const fixture = (name) => JSON.parse(readFileSync(new URL(`./fixtures/${name}.json`, import.meta.url), 'utf8'));
+const showtimesRu = fixture('showtimes_ru');
+const showtimesSummary = fixture('showtimes_summary');
+const showtimesTvEmpty = fixture('showtimes_tv_empty');
+const findKinopoisk = fixture('find_kinopoisk');
+const movieExtras = fixture('movie_550_extras');
 
 // Strip AMODB_* variables of the developer machine unless a test sets them on purpose.
 function childEnv(extra = {}) {
@@ -69,7 +80,7 @@ function rawSession(env) {
   };
 }
 
-test('tools/list over raw stdio returns the 8 tools with descriptions and valid schemas', async () => {
+test('tools/list over raw stdio returns the 9 tools with descriptions and valid schemas', async () => {
   const session = rawSession(childEnv());
   try {
     session.send({
@@ -87,6 +98,7 @@ test('tools/list over raw stdio returns the 8 tools with descriptions and valid 
 
     const tools = list.result.tools;
     assert.deepEqual(tools.map((t) => t.name).sort(), EXPECTED_TOOLS);
+    assert.deepEqual([...TOOL_NAMES].sort(), EXPECTED_TOOLS);
     const ajv = new Ajv({ strict: false });
     for (const tool of tools) {
       assert.match(tool.name, /^[a-z]+(_[a-z]+)*$/);
@@ -99,6 +111,40 @@ test('tools/list over raw stdio returns the 8 tools with descriptions and valid 
       assert.equal(tool.annotations?.readOnlyHint, true, `${tool.name} is read only`);
     }
     assert.match(session.stderr(), /AMODB_API_KEY is not set/);
+
+    // Nothing may offer or mention what the API does not serve.
+    const everything = JSON.stringify(tools);
+    for (const gone of ['aggregate_credits', 'changes', 'tagged_images', 'account']) {
+      assert.ok(!everything.includes(gone), `tool listing must not mention ${gone}`);
+    }
+    const byName = Object.fromEntries(tools.map((t) => [t.name, t]));
+    const appendOf = (name) => byName[name].inputSchema.properties.append.items.enum;
+    assert.ok(appendOf('get_movie').includes('ratings'));
+    assert.ok(!appendOf('get_movie').includes('showtimes'));
+    assert.deepEqual(appendOf('get_tv_show').filter((v) => ['content_ratings', 'episode_groups', 'credits'].includes(v)).sort(), [
+      'content_ratings',
+      'credits',
+      'episode_groups',
+    ]);
+    assert.ok(!appendOf('get_tv_show').includes('release_dates'));
+    assert.deepEqual(appendOf('get_person'), ['combined_credits', 'movie_credits', 'tv_credits', 'images', 'external_ids']);
+    assert.deepEqual(byName.find_by_external_id.inputSchema.properties.external_source.enum, [
+      'imdb_id',
+      'freebase_mid',
+      'freebase_id',
+      'tvdb_id',
+      'tvrage_id',
+      'facebook_id',
+      'twitter_id',
+      'instagram_id',
+      'tiktok_id',
+      'youtube_id',
+      'wikidata_id',
+      'kinopoisk_id',
+    ]);
+    const showtimesSchema = byName.get_showtimes.inputSchema;
+    assert.deepEqual(showtimesSchema.required.sort(), ['id', 'media_type']);
+    assert.deepEqual(showtimesSchema.properties.media_type.enum, ['movie', 'tv']);
   } finally {
     session.close();
   }
@@ -127,7 +173,15 @@ before(async () => {
     if (pathname === '/3/search/multi' || pathname === '/3/search/movie') {
       return sendJson(res, 200, { page: 1, results: items(15), total_pages: 3, total_results: 55 });
     }
-    if (pathname === '/3/movie/550') return sendJson(res, 200, { id: 550, title: 'Fight Club', runtime: 139 });
+    if (pathname === '/3/movie/550') {
+      if ((url.searchParams.get('append_to_response') ?? '').includes('ratings')) return sendJson(res, 200, movieExtras);
+      return sendJson(res, 200, { id: 550, title: 'Fight Club', runtime: 139 });
+    }
+    if (pathname === '/3/movie/550/showtimes') {
+      const country = url.searchParams.get('country');
+      return sendJson(res, 200, country === 'RU' ? showtimesRu : showtimesSummary);
+    }
+    if (pathname === '/3/tv/1396/showtimes') return sendJson(res, 200, showtimesTvEmpty);
     if (pathname === '/3/movie/404404') {
       return sendJson(res, 404, { success: false, status_code: 34, status_message: 'The resource you requested could not be found.' });
     }
@@ -137,6 +191,7 @@ before(async () => {
       }
       return sendJson(res, 200, { id: 777, title: 'Retried' });
     }
+    if (pathname === '/3/find/361') return sendJson(res, 200, findKinopoisk);
     if (pathname === '/3/find/tt0137523') {
       return sendJson(res, 200, { movie_results: [{ id: 550, title: 'Fight Club' }], tv_results: [], person_results: [] });
     }
@@ -235,6 +290,126 @@ describe('tool calls against a stub API', () => {
     });
   });
 
+  test('find_by_external_id passes kinopoisk_id and returns media_type on each item', async () => {
+    await withClient(keyed(), async (client) => {
+      const result = await client.callTool({
+        name: 'find_by_external_id',
+        arguments: { external_id: '361', external_source: 'kinopoisk_id' },
+      });
+      assert.ok(!result.isError);
+      const data = JSON.parse(textOf(result));
+      assert.equal(last().path, '/3/find/361');
+      assert.equal(last().query.external_source, 'kinopoisk_id');
+      assert.equal(data.movie_results[0].media_type, 'movie');
+      assert.deepEqual(data.tv_episode_results, []);
+    });
+  });
+
+  test('find_by_external_id rejects an unknown source without calling the API', async () => {
+    await withClient(keyed(), async (client) => {
+      const before = requests.length;
+      const result = await client.callTool({
+        name: 'find_by_external_id',
+        arguments: { external_id: '361', external_source: 'letterboxd_id' },
+      });
+      assert.equal(result.isError, true);
+      assert.equal(requests.length, before);
+    });
+  });
+
+  test('get_movie returns the appended ratings, moods and soundtracks untouched', async () => {
+    await withClient(keyed(), async (client) => {
+      const result = await client.callTool({
+        name: 'get_movie',
+        arguments: { id: 550, append: ['ratings', 'moods', 'soundtracks'] },
+      });
+      const data = JSON.parse(textOf(result));
+      assert.equal(last().query.append_to_response, 'ratings,moods,soundtracks');
+      assert.deepEqual(data, movieExtras);
+      assert.equal(data.ratings.imdb.value, 8.8);
+      assert.equal(data.moods.source, 'estimated');
+      assert.equal('id' in data.moods, false);
+    });
+  });
+
+  test('get_tv_show rejects aggregate_credits and get_movie rejects changes in append', async () => {
+    await withClient(keyed(), async (client) => {
+      const before = requests.length;
+      const tv = await client.callTool({ name: 'get_tv_show', arguments: { id: 1399, append: ['aggregate_credits'] } });
+      assert.equal(tv.isError, true);
+      const movie = await client.callTool({ name: 'get_movie', arguments: { id: 550, append: ['changes'] } });
+      assert.equal(movie.isError, true);
+      assert.equal(requests.length, before);
+    });
+  });
+
+  test('get_showtimes without a country sends none and returns the country summary as is', async () => {
+    await withClient(keyed(), async (client) => {
+      const result = await client.callTool({ name: 'get_showtimes', arguments: { media_type: 'movie', id: 550 } });
+      assert.ok(!result.isError);
+      assert.equal(last().path, '/3/movie/550/showtimes');
+      assert.ok(!('country' in last().query));
+      assert.deepEqual(JSON.parse(textOf(result)), showtimesSummary);
+    });
+  });
+
+  test('get_showtimes with a country uppercases it and limits venues and showtimes', async () => {
+    await withClient(keyed(), async (client) => {
+      const result = await client.callTool({
+        name: 'get_showtimes',
+        arguments: { media_type: 'movie', id: 550, country: 'ru', max_venues: 1, max_showtimes_per_venue: 2 },
+      });
+      const data = JSON.parse(textOf(result));
+      assert.equal(last().query.country, 'RU');
+      assert.equal(data.country, 'RU');
+      assert.equal(data.results.length, 1);
+      assert.equal(data.returned, 1);
+      assert.equal(data.venues_total, 2);
+      assert.equal(data.truncated, true);
+      assert.equal(data.results[0].showtimes.length, 2);
+      assert.equal(data.results[0].showtimes_total, showtimesRu.results[0].showtimes.length);
+      assert.deepEqual(data.results[0].showtimes[0], showtimesRu.results[0].showtimes[0]);
+      assert.equal(data.results[0].showtimes[0].start, '2026-10-18T21:40');
+      assert.deepEqual(data.countries, showtimesRu.countries);
+    });
+  });
+
+  test('get_showtimes keeps everything when the limits are not reached', async () => {
+    await withClient(keyed(), async (client) => {
+      const result = await client.callTool({
+        name: 'get_showtimes',
+        arguments: { media_type: 'movie', id: 550, country: 'RU', max_venues: 5, max_showtimes_per_venue: 10 },
+      });
+      const data = JSON.parse(textOf(result));
+      assert.equal(data.results.length, 2);
+      assert.equal(data.truncated, false);
+      assert.deepEqual(
+        data.results.map((v) => v.showtimes.length),
+        showtimesRu.results.map((v) => v.showtimes.length),
+      );
+    });
+  });
+
+  test('get_showtimes works for TV and returns an empty reply as is', async () => {
+    await withClient(keyed(), async (client) => {
+      const result = await client.callTool({ name: 'get_showtimes', arguments: { media_type: 'tv', id: 1396 } });
+      assert.equal(last().path, '/3/tv/1396/showtimes');
+      assert.deepEqual(JSON.parse(textOf(result)), showtimesTvEmpty);
+    });
+  });
+
+  test('get_showtimes rejects a country that is not two letters', async () => {
+    await withClient(keyed(), async (client) => {
+      const before = requests.length;
+      const result = await client.callTool({
+        name: 'get_showtimes',
+        arguments: { media_type: 'movie', id: 550, country: 'RUS' },
+      });
+      assert.equal(result.isError, true);
+      assert.equal(requests.length, before);
+    });
+  });
+
   test('get_tv_show, get_season and get_person hit the right paths', async () => {
     await withClient(keyed(), async (client) => {
       await client.callTool({ name: 'get_tv_show', arguments: { id: 1399, append: ['content_ratings'] } });
@@ -322,7 +497,7 @@ describe('tool calls against a stub API', () => {
     await withClient(env, async (client) => {
       const before = requests.length;
       const tools = await client.listTools();
-      assert.equal(tools.tools.length, 8);
+      assert.equal(tools.tools.length, 9);
       for (const call of [
         { name: 'search_titles', arguments: { query: 'x' } },
         { name: 'get_movie', arguments: { id: 550 } },

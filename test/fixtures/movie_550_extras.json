@@ -1,0 +1,139 @@
+{
+  "id": 550,
+  "title": "Fight Club",
+  "runtime": 139,
+  "moods": {
+    "source": "estimated",
+    "results": [
+      {
+        "name": "action",
+        "avg": 4,
+        "values": [
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "name": "fear",
+        "avg": 7,
+        "values": [
+          6,
+          7,
+          8
+        ]
+      },
+      {
+        "name": "humor",
+        "avg": 3,
+        "values": [
+          2,
+          3,
+          4
+        ]
+      }
+    ]
+  },
+  "soundtracks": {
+    "results": []
+  },
+  "ratings": {
+    "imdb": {
+      "value": 8.8,
+      "votes": 2669989
+    },
+    "kinopoisk": {
+      "value": 8.7,
+      "votes": null
+    },
+    "metacritic": {
+      "value": 67,
+      "votes": null
+    },
+    "rotten_tomatoes": {
+      "value": 81,
+      "votes": null
+    },
+    "tmdb": {
+      "value": 8.437,
+      "votes": 33039
+    }
+  },
+  "wikidata": {
+    "id": 550,
+    "wikidata_id": "Q190050",
+    "budget": {
+      "value": 63000000,
+      "currency": "USD"
+    },
+    "box_office": {
+      "value": 101209702,
+      "currency": "USD",
+      "worldwide": true
+    },
+    "follows": null,
+    "followed_by": null,
+    "sitelinks": {
+      "en": "Fight Club",
+      "ru": "Бойцовский клуб (фильм)",
+      "uk": "Бійцівський клуб (фільм)",
+      "be": "Байцоўскі клуб (фільм)",
+      "bg": "Боен клуб (филм)",
+      "cs": "Klub rváčů (film)",
+      "pl": "Podziemny krąg (film)",
+      "ro": "Fight Club (film)",
+      "fr": "Fight Club (film)",
+      "it": "Fight Club (film)",
+      "es": "Fight Club",
+      "pt": "Fight Club",
+      "he": "מועדון קרב (סרט)",
+      "zh": "鬥陣俱樂部"
+    },
+    "awards": [
+      {
+        "wikidata_id": "Q28044798",
+        "label": "Empire Awards, UK for best british actress"
+      },
+      {
+        "wikidata_id": "Q943908",
+        "label": "Jupiter Award",
+        "year": 2000
+      },
+      {
+        "wikidata_id": "Q22055485",
+        "label": "Online Film & Television Association Award",
+        "year": 2000
+      }
+    ],
+    "nominations": [
+      {
+        "wikidata_id": "Q488645",
+        "label": "Academy Award for Best Sound Editing",
+        "year": 2000
+      }
+    ],
+    "based_on": [
+      {
+        "wikidata_id": "Q837283",
+        "label": "Fight Club",
+        "author": {
+          "wikidata_id": "Q268181",
+          "label": "Chuck Palahniuk"
+        }
+      }
+    ],
+    "filming_locations": [
+      {
+        "wikidata_id": "Q65",
+        "label": "Los Angeles"
+      }
+    ],
+    "narrative_locations": [
+      {
+        "wikidata_id": "Q65",
+        "label": "Los Angeles"
+      }
+    ],
+    "original_broadcasters": []
+  }
+}

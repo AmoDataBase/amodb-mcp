@@ -20,7 +20,8 @@ export const SERVER_VERSION = readVersion();
 const INSTRUCTIONS =
   'Movie and TV metadata from amodb. Use search_titles to turn a name into a numeric id, ' +
   'then get_movie, get_tv_show, get_season or get_person for details. ' +
-  'Use find_by_external_id for IMDb ids, trending for what is popular, and discover_movies for filters.';
+  'Use find_by_external_id for IMDb, Kinopoisk and Wikidata ids, trending for what is popular, discover_movies for filters, ' +
+  'and get_showtimes for cinema times. get_movie and get_tv_show can append ratings, moods, soundtracks and wikidata.';
 
 export interface ServerOptions {
   /** Environment to read AMODB_API_KEY, AMODB_LANGUAGE and AMODB_BASE_URL from. Defaults to process.env. */

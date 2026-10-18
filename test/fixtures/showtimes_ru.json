@@ -1,0 +1,183 @@
+{
+  "id": 550,
+  "country": "RU",
+  "results": [
+    {
+      "id": 1114,
+      "name": "Мираж Синема НА БОЛЬШОМ",
+      "chain": {
+        "key": "mirage-ru",
+        "name": "Мираж Синема"
+      },
+      "city": "Санкт-Петербург",
+      "region": null,
+      "address": "Большой пр. П.С., д. 35А",
+      "postal_code": null,
+      "country": "RU",
+      "timezone": "Europe/Moscow",
+      "latitude": null,
+      "longitude": null,
+      "phone": null,
+      "url": "https://www.mirage.ru/spb/cinema/1/",
+      "showtimes": [
+        {
+          "date": "2026-10-18",
+          "start": "2026-10-18T21:40",
+          "end": null,
+          "auditorium": null,
+          "formats": [
+            "2D"
+          ],
+          "tags": [],
+          "audio": null,
+          "subtitles": null,
+          "language": null,
+          "price": null,
+          "currency": null,
+          "prices": null,
+          "booking_url": "https://www.mirage.ru/ticket_new/aca7b114-d587-4fc5-9df6-...",
+          "sold_out": false
+        },
+        {
+          "date": "2026-10-19",
+          "start": "2026-10-19T22:20",
+          "end": null,
+          "auditorium": "Зал №4",
+          "formats": [
+            "2D"
+          ],
+          "tags": [],
+          "audio": null,
+          "subtitles": null,
+          "language": null,
+          "price": null,
+          "currency": null,
+          "prices": null,
+          "booking_url": "https://www.mirage.ru/ticket_new/0c32e190-890a-4c81-a754-...",
+          "sold_out": false
+        },
+        {
+          "date": "2026-10-20",
+          "start": "2026-10-20T21:40",
+          "end": null,
+          "auditorium": null,
+          "formats": [
+            "2D"
+          ],
+          "tags": [],
+          "audio": null,
+          "subtitles": null,
+          "language": null,
+          "price": null,
+          "currency": null,
+          "prices": null,
+          "booking_url": "https://www.mirage.ru/ticket_new/7f18e423-4a40-40f3-b68f-...",
+          "sold_out": false
+        },
+        {
+          "date": "2026-10-21",
+          "start": "2026-10-21T21:40",
+          "end": null,
+          "auditorium": null,
+          "formats": [
+            "2D"
+          ],
+          "tags": [],
+          "audio": null,
+          "subtitles": null,
+          "language": null,
+          "price": null,
+          "currency": null,
+          "prices": null,
+          "booking_url": "https://www.mirage.ru/ticket_new/5ad6b82b-82b3-4ea6-9e65-...",
+          "sold_out": false
+        }
+      ]
+    },
+    {
+      "id": 1115,
+      "name": "Мираж Синема ПИК",
+      "chain": {
+        "key": "mirage-ru",
+        "name": "Мираж Синема"
+      },
+      "city": "Санкт-Петербург",
+      "region": null,
+      "address": "ул. Ефимова, д.2",
+      "postal_code": null,
+      "country": "RU",
+      "timezone": "Europe/Moscow",
+      "latitude": null,
+      "longitude": null,
+      "phone": null,
+      "url": "https://www.mirage.ru/spb/cinema/27/",
+      "showtimes": [
+        {
+          "date": "2026-10-19",
+          "start": "2026-10-19T20:10",
+          "end": null,
+          "auditorium": "Зал №4",
+          "formats": [
+            "2D"
+          ],
+          "tags": [],
+          "audio": null,
+          "subtitles": null,
+          "language": null,
+          "price": null,
+          "currency": null,
+          "prices": null,
+          "booking_url": "https://www.mirage.ru/ticket_new/1d143ca6-1bbe-48ee-954a-...",
+          "sold_out": false
+        },
+        {
+          "date": "2026-10-20",
+          "start": "2026-10-20T20:10",
+          "end": null,
+          "auditorium": "Зал №4",
+          "formats": [
+            "2D"
+          ],
+          "tags": [],
+          "audio": null,
+          "subtitles": null,
+          "language": null,
+          "price": null,
+          "currency": null,
+          "prices": null,
+          "booking_url": "https://www.mirage.ru/ticket_new/8b2e0f6a-5b62-41eb-a398-...",
+          "sold_out": false
+        },
+        {
+          "date": "2026-10-21",
+          "start": "2026-10-21T20:10",
+          "end": null,
+          "auditorium": "Зал №4",
+          "formats": [
+            "2D"
+          ],
+          "tags": [],
+          "audio": null,
+          "subtitles": null,
+          "language": null,
+          "price": null,
+          "currency": null,
+          "prices": null,
+          "booking_url": "https://www.mirage.ru/ticket_new/3723875b-a7df-426f-968a-...",
+          "sold_out": false
+        }
+      ]
+    }
+  ],
+  "countries": [
+    {
+      "country": "RU",
+      "name": "Russia",
+      "venues": 2,
+      "cities": 1,
+      "showtimes": 7,
+      "first_day": "2026-10-18",
+      "last_day": "2026-10-21"
+    }
+  ]
+}
